@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <header>
+    <h1>Papy-Eat</h1>
+  </header>
+  <main id="main">
+    <h2>Bienvenues sur le site de commande des produits du Poirier de Lentilly !</h2>
+    <section id="identification">
+      <h3>Identification</h3>
+      <label for="famille-select">Qui êtes vous ?</label>
+      <select name="famille" id="famille-select">
+        <option value="">--Please choose an option--</option>
+        <option value="Caban">Caban</option>
+        <option value="St-Genis">St-Genis</option>
+        <option value="Tassin">Tassin</option>
+      </select>
+      <hr>
+    </section>
+    <setion id="productsChoice">
+      <!--Code généré en JS-->
+    </setion>
+    <hr>
+    <section id="panier">
+<p id="panierVide">Votre panier est pour le moment vide !</p>
+<!--<button id="btn-order" style='display: none;'>Commander</button>-->
+    </section>
+  </main>
+  <footer>
+
+  </footer>
+  <script src="js/app.js"></script>
+  <script>
+    createPanier();
+    idClient();
+  </script>
+</body>
+
+</html>
