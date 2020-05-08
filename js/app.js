@@ -22,23 +22,7 @@ const createPanier = () => {
         localStorage.setItem("PapyPanier", JSON.stringify(panierInit));
     };
 };
-//A SUPRIMER
-/*Identification du client
-idClient = () => {
-    let idClient = "";
-    let select = document.getElementById('famille-select');
-    select.addEventListener("change", function () {
-        idClient = select.value;
-        console.log('le choix à changé pour ' + idClient);
-        let getPanier = localStorage.getItem('PapyPanier');
-        let setPanier = JSON.parse(getPanier);
-        setPanier.push(idClient);
-        localStorage.setItem('PapyPanier', JSON.stringify(setPanier));
-        allProductsList('', 'Produits')
-    });
-    return idClient;
-};
-*/
+
 /*Appel vers l'API
   @param id : string*/
 let api_demande = (id, table) => {
@@ -57,11 +41,8 @@ let api_demande = (id, table) => {
 };
 
 
-
-allProductsList('','Produits')
 /*Création du HTML après appel identification
 **********************************************/
-
 //Build la liste des produits en vente sur la page index => Fonction appelée
 async function allProductsList(id, table) {
     const produits = await api_demande(id, table);
@@ -80,6 +61,7 @@ async function allProductsList(id, table) {
 
     //Création de la div pour la nouvelle liste
     let list = document.createElement('div');
+    list.setAttribute('class', 'flex-grid');
     list.setAttribute('id', 'productsChoiceList');
     section.appendChild(list);
     console.log('Administration: Création de la liste de produits');
@@ -88,23 +70,30 @@ async function allProductsList(id, table) {
     produits.records.forEach((produit) => {
         //création du block contenant un produit + Ajout des class pour le css
         let produitBlock = document.createElement('div');
+        produitBlock.setAttribute('class', 'block-list');
         let produitName = document.createElement('h4');
+        produitName.setAttribute('class', 'block-list__name')
         let produitIllustration = document.createElement('div');
+        produitIllustration.setAttribute('class', 'block-list__illustration')
         let produitImage = document.createElement("img");
+        produitImage.setAttribute('class', 'produit-image');
         let produitBtn = document.createElement("button");
+        produitBtn.setAttribute('class', 'block-list__btn');
         produitBtn.setAttribute('id', 'btnAddPanier');
+
+        //Attribut pour CSS
 
         //Mise en place du HTML
         list.appendChild(produitBlock);
-        produitBlock.appendChild(produitName);
         produitBlock.appendChild(produitIllustration);
         produitIllustration.appendChild(produitImage);
+        produitBlock.appendChild(produitName);
         produitBlock.appendChild(produitBtn).innerHTML;
 
         //Contenu des balises
         produitName.textContent = produit.fields.Name;
         produitImage.setAttribute("src", produit.fields.Images[0].url);
-        produitBtn.textContent = "Mettre dans le panier";
+        produitBtn.textContent = "Mettre dans le vélo";
     });
     //Activation des boutons d'ajout au panier
     addPanier()
@@ -124,19 +113,22 @@ addPanier = () => {
         console.log("Administration : le produit a été ajouté au panier");
         alert("Vous avez ajouté ce produit dans votre panier")
         //Génération du panier
-        panier()
+        panier();
+        window.location.reload();
+
     });
 };
 
 /*Page panier
 **********************************************/
-
 panier = () => {
     //Vérifie si un prduit est dans le panier
     let panier = JSON.parse(localStorage.getItem("PapyPanier"));
     if (panier.length > 0) {
         //S'il n'est pas vide on supprime le message et on créé le tableau récapitulatif et le btn commander apparait
-        document.getElementById("panierVide").remove();
+        if (document.getElementById("panierVide")) {
+            document.getElementById("panierVide").remove();
+        }
         //document.getElementById('btn-order').style.display = 'block';
 
         //Création de la structure principale de l'affichage du panier 
@@ -145,11 +137,12 @@ panier = () => {
         let sectionHead = document.createElement('h3');
         let facture = document.createElement("div");
 
-
         //Placement de la structure dans la page
         section.appendChild(sectionHead);
         section.appendChild(facture);
 
+        //Titre
+        sectionHead.innerHTML = 'Les produits chargés dans le vélo de Papy'
 
         //Pour chaque produit du panier, on créé une image du produit avec son nom
         for (let i = 0; i < panier.length; i++) {
@@ -157,15 +150,16 @@ panier = () => {
             //Création des éléments
             let produit = document.createElement("div");
             facture.appendChild(produit);
+            produit.setAttribute('class', 'line');
             let produitImg = document.createElement("img");
+            produitImg.setAttribute('class', 'lineImg');
             produit.appendChild(produitImg);
             let produitNom = document.createElement("h4");
+            produitNom.setAttribute('class', 'lineName')
             produit.appendChild(produitNom);
             let corbeille = document.createElement('i');
-            produit.appendChild(corbeille);
-
-            //Attributs pour le css
             corbeille.setAttribute('class', "fas fa-trash-alt annulerProduit");
+            produit.appendChild(corbeille);
 
             //Contenu des éléments
             produitImg.setAttribute('src', panier[i].records[0].fields.Images[0].url);
@@ -198,6 +192,37 @@ annulerProduit = (i) => {
     //relancer la création de l'addition
     window.location.reload();
 };
+
+/*Vérification des informations sur le client et du panier
+*********************************************************/
+verifClientId = () => {
+    let idClient = document.getElementById('famille-select').value;
+    if (idClient === "") {
+        alert("Vous n'avez pas séléctionner où vous livrer");
+    } else {
+        return idClient
+    }
+};
+
+//Une vérification du panier est quand même effectué en cas de suppression du localStorage par l'user
+verifPanier =()=>{
+    if(localStorage.getItem('PapyPanier') === null){
+        alert('Votre panier est vide');
+    }else{
+        return true
+    }
+};
+
+btnOrder = () => {
+    let btnOrder = document.getElementById('btn-order');
+    //Le bouton n'existe pas si le panier est vide - Permet d'éviter les erreurs
+    if (btnOrder) {
+        btnOrder.addEventListener('click', function () {
+            verifClientId();
+            verifPanier()
+        })
+    }
+}
 
 //Création d'un exemple de commande pour test code
 
@@ -236,5 +261,4 @@ envoiDonnees = (objetRequest) => {
         request.setRequestHeader("Content-Type", "application/json");
         request.send(JSON.stringify(objet));
     });
-};
-
+}

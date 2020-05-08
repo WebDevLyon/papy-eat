@@ -1,0 +1,14 @@
+.blockPanier{
+    display: flex;
+justify-content: space-around;
+background-color: $green;
+}
+
+.line{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    &Img{
+        height: 3rem;
+    }
+}

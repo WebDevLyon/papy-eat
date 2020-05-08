@@ -1,0 +1,29 @@
+.block-list {
+    width: 15%;
+    border: 1px;
+    margin: 1rem;
+    &__illustration {
+        margin-bottom: 1rem;
+        min-height: 182px;
+        background: #eeeeee;
+        display: flex;
+        flex-direction: column;
+        & .produit-image {
+            margin: auto;
+            width: 100%;
+        }
+        @media screen and (max-width: 425px) {
+            min-height: 92px;
+        }
+    }
+    &__name {
+        text-align: center;
+    }
+    &__btn {
+        width: 75%;
+        margin: 0 12.5%;
+    }
+    @media screen and (max-width: 425px) {
+        width: 30%;
+    }
+}

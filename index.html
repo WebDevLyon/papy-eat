@@ -11,38 +11,43 @@
 
 <body>
   <header>
-    <h1>Papy-Eat</h1>
+    <h1>
+      <img src="img/ubereats-logo.png" style="width: 150px" alt="Logo de Papy-eat">
+    </h1>
+    <p>Bienvenue sur le site de commande des produits du Poirier de Lentilly !</p>
+
   </header>
   <main id="main">
-    <h2>Bienvenues sur le site de commande des produits du Poirier de Lentilly !</h2>
-    <section id="identification">
-      <h3>Identification</h3>
-      <label for="famille-select">Qui êtes vous ?</label>
-      <select name="famille" id="famille-select">
-        <option value="">--Please choose an option--</option>
-        <option value="Caban">Caban</option>
-        <option value="St-Genis">St-Genis</option>
-        <option value="Tassin">Tassin</option>
-      </select>
-      <hr>
-    </section>
     <setion id="productsChoice">
       <!--Code généré en JS-->
     </setion>
-    <hr>
-    <section id="panier">
-<p id="panierVide">Votre panier est pour le moment vide !</p>
-<!--<button id="btn-order" style='display: none;'>Commander</button>-->
+    <section id="blockPanier" class="blockPanier">
+      <div id="panier">
+        <p id="panierVide">Votre panier est pour le moment vide !</p>
+      </div>
+      <hr>
+      <div class="adressForm">
+        <label for="famille-select" class="adressForm__label">Où êtes vous ?</label>
+        <select name="famille" id="famille-select">
+          <option value="">--Please choose an option--</option>
+          <option value="Caban">Caban</option>
+          <option value="St-Genis">St-Genis</option>
+          <option value="Tassin">Tassin</option>
+        </select>
+      </div>
+
+      <!--<button id="btn-order" style='display: none;'>Commander</button>-->
     </section>
   </main>
   <footer>
-
+    <p>Web application dévelopée par Nicolas Lachise | Web Developpeur Lyon ©Copyright 2020</p>
   </footer>
   <script src="js/app.js"></script>
   <script>
     createPanier();
-    allProductsList();
+    allProductsList('', 'Produits');
     panier();
+    btnOrder();
   </script>
 </body>
 
