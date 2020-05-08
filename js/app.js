@@ -22,8 +22,8 @@ const createPanier = () => {
         localStorage.setItem("PapyPanier", JSON.stringify(panierInit));
     };
 };
-
-//Identification du client
+//A SUPRIMER
+/*Identification du client
 idClient = () => {
     let idClient = "";
     let select = document.getElementById('famille-select');
@@ -38,7 +38,7 @@ idClient = () => {
     });
     return idClient;
 };
-
+*/
 /*Appel vers l'API
   @param id : string*/
 let api_demande = (id, table) => {
@@ -58,7 +58,7 @@ let api_demande = (id, table) => {
 
 
 
-
+allProductsList('','Produits')
 /*Création du HTML après appel identification
 **********************************************/
 
@@ -134,7 +134,7 @@ addPanier = () => {
 panier = () => {
     //Vérifie si un prduit est dans le panier
     let panier = JSON.parse(localStorage.getItem("PapyPanier"));
-    if (panier.length > 1) {
+    if (panier.length > 0) {
         //S'il n'est pas vide on supprime le message et on créé le tableau récapitulatif et le btn commander apparait
         document.getElementById("panierVide").remove();
         //document.getElementById('btn-order').style.display = 'block';
@@ -152,7 +152,7 @@ panier = () => {
 
 
         //Pour chaque produit du panier, on créé une image du produit avec son nom
-        for (let i = 1; i < panier.length; i++) {
+        for (let i = 0; i < panier.length; i++) {
 
             //Création des éléments
             let produit = document.createElement("div");
@@ -161,45 +161,39 @@ panier = () => {
             produit.appendChild(produitImg);
             let produitNom = document.createElement("h4");
             produit.appendChild(produitNom);
+            let corbeille = document.createElement('i');
+            produit.appendChild(corbeille);
 
             //Attributs pour le css
+            corbeille.setAttribute('class', "fas fa-trash-alt annulerProduit");
 
             //Contenu des éléments
-            produitImg.setAttribute('src', panier[i].records[0].fields.Images[0].url)
-        }
+            produitImg.setAttribute('src', panier[i].records[0].fields.Images[0].url);
+            produitNom.innerHTML = panier[i].records[0].fields.Name;
+            corbeille.addEventListener('click', annulerProduit.bind(i));
+        };
+
+        //Création du bouton de commande à la fin du pannier si celui-ci non vide
+        let btnOrder = document.createElement('button');
+        btnOrder.setAttribute('id', 'btn-order');
+        btnOrder.innerHTML = 'Envoyer la commande';
+        facture.appendChild(btnOrder);
+
     }
 };
-/*
-        //Dernière ligne du tableau : Total
-        facture.appendChild(ligneTotal);
-        ligneTotal.appendChild(colonneRefTotal);
-        colonneRefTotal.textContent = "Total à payer"
-        ligneTotal.appendChild(colonnePrixPaye);
-        colonnePrixPaye.setAttribute("id", "sommeTotal")
- 
-        //Calcule de l'addition total
-        let totalPaye = 0;
-        JSON.parse(localStorage.getItem("userPanier")).forEach((produit) => {
-            totalPaye += produit.price / 100;
-        });
- 
-        //Affichage du prix total à payer dans l'addition
-        console.log("Administration : " + totalPaye);
-        document.getElementById("sommeTotal").textContent = totalPaye + " €";
-    };
-}
-*/
+
 //Supprimer un produit du panier
 annulerProduit = (i) => {
     console.log("Administration : Enlever le produit à l'index " + i);
     //recupérer le array
-    userPanier.splice(i, 1);
-    console.log("Administration : " + userPanier);
+    let panier = JSON.parse(localStorage.getItem('PapyPanier'));
+    panier.splice(i, 1);
+    console.log("Administration : " + 'voici le nouveau panier ' + panier);
     //vide le localstorage
     localStorage.clear();
     console.log("Administration : localStorage vidé");
     // mettre à jour le localStorage avec le nouveau panier
-    localStorage.setItem('userPanier', JSON.stringify(userPanier));
+    localStorage.setItem('PapyPanier', JSON.stringify(panier));
     console.log("Administration : localStorage mis à jour");
     //relancer la création de l'addition
     window.location.reload();
