@@ -1,0 +1,29 @@
+.line-order {
+    display: flex;
+    justify-content: space-around;
+}
+
+.newProduit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    & h2,
+    & .fleche {
+        flex: 0.5;
+        text-align: center;
+    }
+    & .fleche{
+        @media screen and (max-width:435px){
+            display:none;
+        }
+    }
+    & .airtable-embed {
+        flex: 1;
+        @media screen and (max-width:435px){
+            width: 100%;
+        }
+    }
+    @media screen and (max-width:435px){
+        display:block;
+    }
+}

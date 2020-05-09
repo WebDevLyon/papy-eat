@@ -51,10 +51,18 @@ section {
   width: 50%;
   margin: 2rem 25% 1rem 25%;
 }
+#btn--valid-delivery {
+  color: #4CAF50;
+}
 
 .adressForm {
   margin: auto 0;
 }
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .block-list {
   width: 15%;
   border: 1px;
@@ -128,6 +136,39 @@ footer {
 }
 footer p {
   text-align: center;
+}
+
+.line-order {
+  display: flex;
+  justify-content: space-around;
+}
+
+.newProduit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.newProduit h2, .newProduit .fleche {
+  flex: 0.5;
+  text-align: center;
+}
+@media screen and (max-width: 435px) {
+  .newProduit .fleche {
+    display: none;
+  }
+}
+.newProduit .airtable-embed {
+  flex: 1;
+}
+@media screen and (max-width: 435px) {
+  .newProduit .airtable-embed {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 435px) {
+  .newProduit {
+    display: block;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

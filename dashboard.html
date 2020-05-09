@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <h1>
+            <a href="index.html"><img src="img/papyeats-logo.png" style="width: 150px" alt="Logo de Papy-eat"></a>
+        </h1>
+        <p>Bienvenue sur le site de commande des produits du Poirier de <a href="dashboard.html">Lentilly</a> !</p>
+    </header>
+    <main id="main">
+        <section id="orderIn">
+            <h2>Liste des commandes en cours (VALIDATION NON FONTIONNELLE POUR LE MOMENT)</h2>
+            <div id="list-order" class="list-order">
+                <!--Généré par JS-->
+            </div>
+        </section>
+        <section id="orderHistory">
+            <h2>Historique des commandes (NON FONCTIONNEL POUR LE MOMENT)</h2>
+        </section>
+        <section class="newProduit">
+            <h2>Pour ajouter une produit, remplir ce formulaire</h2>
+            <p class="fleche">==></p>
+            <iframe class="airtable-embed" src="https://airtable.com/embed/shrrpYeiPuVxJfxms?backgroundColor=yellow"
+                frameborder="0" onmousewheel="" width="50%" height="533"
+                style="background: transparent; border: 1px solid #ccc;"></iframe>
+        </section>
+    </main>
+    <footer>
+        <p>Web application dévelopée par Nicolas Lachise | Web Developpeur Lyon ©Copyright 2020</p>
+    </footer>
+    <script src="js/dashboard.js"></script>
+    <script>
+        listOrder()
+    </script>
+</body>
+
+</html>

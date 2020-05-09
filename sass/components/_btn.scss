@@ -25,9 +25,12 @@
   }
 **/
 
-#btn{
-  &-order{
+#btn {
+  &-order {
     width: 50%;
     margin: 2rem 25% 1rem 25%;
+  }
+  &--valid-delivery {
+    color: $green;
   }
 }
