@@ -21,6 +21,7 @@
     <setion id="productsChoice">
       <!--Code généré en JS-->
     </setion>
+    <hr>
     <section id="blockPanier" class="blockPanier">
       <div id="panier">
         <p id="panierVide">Votre panier est pour le moment vide !</p>
@@ -30,9 +31,6 @@
         <label for="famille-select" class="adressForm__label">Où êtes vous ?</label>
         <select name="famille" id="famille-select">
           <option value="">--Please choose an option--</option>
-          <option value="Caban">Caban</option>
-          <option value="St-Genis">St-Genis</option>
-          <option value="Tassin">Tassin</option>
         </select>
       </div>
 
@@ -46,6 +44,7 @@
   <script>
     createPanier();
     allProductsList('', 'Produits');
+    listUser();
     panier();
     btnOrder();
   </script>

@@ -22,6 +22,19 @@ const createPanier = () => {
         localStorage.setItem("PapyPanier", JSON.stringify(panierInit));
     };
 };
+//Création de la liste des utilisateurs
+async function listUser() {
+    let user = await api_demande("", "Client");
+    let listUser = document.getElementById('famille-select');
+    user.records.forEach((user) => {
+        let option = document.createElement('option');
+        option.setAttribute('value', user.id);
+        listUser.appendChild(option);
+        option.innerHTML = user.fields.Name
+    });
+
+
+};
 
 /*Appel vers l'API
   @param id : string*/
@@ -78,7 +91,7 @@ async function allProductsList(id, table) {
         let produitImage = document.createElement("img");
         produitImage.setAttribute('class', 'produit-image');
         let produitBtn = document.createElement("button");
-        produitBtn.setAttribute('class', 'block-list__btn');
+        produitBtn.setAttribute('class', 'block-list__btn' + ' ' + produit.id);
         produitBtn.setAttribute('id', 'btnAddPanier');
 
         //Attribut pour CSS
@@ -103,20 +116,21 @@ async function allProductsList(id, table) {
  **********************************************/
 addPanier = () => {
     //Au clic de l'user pour mettre le produit dans le panier
-    let btnPanier = document.getElementById('btnAddPanier');
-    btnPanier.addEventListener("click", async function () {
-        const produits = await api_demande("", "Produits");
-        //Récupération du panier dans le localStorage et ajout du produit dans le panier avant revoit dans le localStorage
-        userPanier = JSON.parse(localStorage.getItem('PapyPanier'));
-        userPanier.push(produits);
-        localStorage.setItem("PapyPanier", JSON.stringify(userPanier));
-        console.log("Administration : le produit a été ajouté au panier");
-        alert("Vous avez ajouté ce produit dans votre panier")
-        //Génération du panier
-        panier();
-        window.location.reload();
-
-    });
+    let btnPanier = document.querySelectorAll('#btnAddPanier');
+    for (let btn of btnPanier) {
+        btn.addEventListener("click", async function () {
+            const produits = await api_demande(btn.getAttribute('class').split(' ')[1], "Produits");
+            //Récupération du panier dans le localStorage et ajout du produit dans le panier avant revoit dans le localStorage
+            userPanier = JSON.parse(localStorage.getItem('PapyPanier'));
+            userPanier.push(produits);
+            localStorage.setItem("PapyPanier", JSON.stringify(userPanier));
+            console.log("Administration : le produit a été ajouté au panier");
+            alert("Vous avez ajouté ce produit dans votre panier")
+            //Génération du panier
+            panier();
+            window.location.reload()
+        });
+    };
 };
 
 /*Page panier
@@ -162,8 +176,8 @@ panier = () => {
             produit.appendChild(corbeille);
 
             //Contenu des éléments
-            produitImg.setAttribute('src', panier[i].records[0].fields.Images[0].url);
-            produitNom.innerHTML = panier[i].records[0].fields.Name;
+            produitImg.setAttribute('src', panier[i].fields.Images[0].url);
+            produitNom.innerHTML = panier[i].fields.Name;
             corbeille.addEventListener('click', annulerProduit.bind(i));
         };
 
@@ -200,35 +214,23 @@ verifClientId = () => {
     if (idClient === "") {
         alert("Vous n'avez pas séléctionner où vous livrer");
     } else {
-        return idClient
-    }
-};
-
-//Une vérification du panier est quand même effectué en cas de suppression du localStorage par l'user
-verifPanier =()=>{
-    if(localStorage.getItem('PapyPanier') === null){
-        alert('Votre panier est vide');
-    }else{
         return true
     }
 };
 
-btnOrder = () => {
-    let btnOrder = document.getElementById('btn-order');
-    //Le bouton n'existe pas si le panier est vide - Permet d'éviter les erreurs
-    if (btnOrder) {
-        btnOrder.addEventListener('click', function () {
-            verifClientId();
-            verifPanier()
-        })
+//Une vérification du panier est quand même effectué en cas de suppression du localStorage par l'user
+verifPanier = () => {
+    if (localStorage.getItem('PapyPanier') === null) {
+        alert('Votre panier est vide');
+    } else {
+        return true
     }
-}
-
-//Création d'un exemple de commande pour test code
-
-const objet = {
+};
+/*A Supprimer
+**************/
+const objetTest = {
     "fields": {
-        "Date": "2012-05-16",
+        "Date": "2012-5-16",
         "Client": [
             "rec0P5lgLqp4yO3Z2"
         ],
@@ -238,6 +240,54 @@ const objet = {
         ]
     }
 };
+btnOrder = () => {
+    let btnOrder = document.getElementById('btn-order');
+    //Le bouton n'existe pas si le panier est vide - Permet d'éviter les erreurs
+    if (btnOrder) {
+        btnOrder.addEventListener('click', function () {
+            if (verifClientId() == true && verifPanier() == true) {
+                console.log('Administration : Tout est Ok, la commande peut être envoyée');
+                //Création de l'objet de la commande
+                envoiDonnees(createRequestObject());
+                //Vider le localStorage une fois la commande passée
+                localStorage.clear();
+                //Message de remerciement
+                alert('Merci de votre commande')
+                //Rechargement de la page
+                window.location.reload();
+            } else {
+                console.log('Administration : il y a eu un problème pour l\'envoi de la commande')
+            }
+        })
+    }
+}
+
+//Création d'un exemple de commande pour test code
+createRequestObject = () => {
+    //class du fields de la requete
+    class RequestFields {
+        constructor(date, client, produit) {
+            this.date = date;
+            this.client = client;
+            this.produits = produit;
+        }
+    }
+
+    //Préparation des éléments du fields
+    let dateCommande = aujourdhui();
+    let client = [document.getElementById('famille-select').value];
+    let produits = ProduitInPanier();
+
+    //Création du fields
+    let commande = new RequestFields(dateCommande, client, produits);
+    console.log(commande);
+    //Finalisation de l'objet de la requete
+    let test = { "fields": { "Date": commande.date, "Client": commande.client, "Produits commandés": commande.produits } }
+    console.log(test)
+    return test;
+};
+
+
 
 //créer un record
 envoiDonnees = (objetRequest) => {
@@ -246,19 +296,30 @@ envoiDonnees = (objetRequest) => {
         request.onreadystatechange = function () {
             if (this.readyState == XMLHttpRequest.DONE && this.status == 201) {
 
-                console.log('commande envoyée')
-                //Sauvegarde du retour de l'API dans la sessionStorage pour affichage dans order-confirm.html
-                //sessionStorage.setItem("order", this.responseText);
-
-                //Chargement de la page de confirmation
-                //document.forms["form-panier"].action = './order-confirm.html';
-                //document.forms["form-panier"].submit();
-
-                resolve(JSON.parse(this.responseText));
+                //resolve(JSON.parse(this.responseText));
             }
         };
         request.open("POST", "https://api.airtable.com/v0/appI9Ujyv4E6roNx3/Commandes/?api_key=keygHycxBbIn4H0c6");
         request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify(objet));
+        request.send(JSON.stringify(objetRequest));
     });
+};
+
+//Fonction pour extraire la date du jour
+aujourdhui = () => {
+    let now = new Date();
+    let annee = now.getFullYear();
+    let mois = now.getMonth() + 1;
+    let jour = now.getDate();
+
+    return annee + '-' + mois + '-' + jour;
+};
+
+//Fonction pour extraire la liste de produit dans le panier
+ProduitInPanier = () => {
+    let idProduit = [];
+    JSON.parse(localStorage.getItem('PapyPanier')).forEach((produit) => {
+        idProduit.push(produit.id);
+    })
+    return idProduit;
 }
