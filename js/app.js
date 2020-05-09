@@ -150,7 +150,7 @@ panier = () => {
 
         let sectionHead = document.createElement('h3');
         let facture = document.createElement("div");
-
+        facture.setAttribute('class', 'panierResume');
         //Placement de la structure dans la page
         section.appendChild(sectionHead);
         section.appendChild(facture);
@@ -185,7 +185,7 @@ panier = () => {
         let btnOrder = document.createElement('button');
         btnOrder.setAttribute('id', 'btn-order');
         btnOrder.innerHTML = 'Envoyer la commande';
-        facture.appendChild(btnOrder);
+        document.getElementById('blockPanier').appendChild(btnOrder);
 
     }
 };

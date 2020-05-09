@@ -1,14 +1,22 @@
-.blockPanier{
+.blockPanier {
     display: flex;
-justify-content: space-around;
-
+    justify-content: space-around;
+    @media screen and (max-width: 425px) {
+        display: block;
+    }
 }
 
-.line{
+.line {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    &Img{
+    &Img {
         height: 3rem;
+    }
+}
+
+.adressForm, .panierResume{
+    @media screen and (max-width: 425px) {
+        margin: 1rem;
     }
 }
